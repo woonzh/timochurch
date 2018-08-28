@@ -27,7 +27,7 @@ function seturl(){
     url: url,
     type: 'POST',
     data:{
-      "url": newurl;
+      url: newurl
     },
     success: function (data) {
       var jidraw=JSON.parse(data);
