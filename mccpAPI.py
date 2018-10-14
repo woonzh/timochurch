@@ -10,6 +10,7 @@ from flask_cors import CORS
 from flask_restful import Resource, Api
 import json
 import dbconnector as db
+import loginapp
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,7 +18,7 @@ CORS(app)
 
 @app.route('/')
 def hello():
-    return render_template('index.html')
+    return render_template('login.html')
 
 @app.route('/main')
 def main():
@@ -64,6 +65,27 @@ def seturl():
         url = request.args.get("url" ,type = str, default="")
         ret={
             'result':db.setUrl(url)
+            }
+        
+        resp = flask.Response(json.dumps(ret))
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Credentials'] = 'true'
+        resp.headers['Access-Control-Allow-Methods']= 'GET,PUT,POST,DELETE,OPTIONS'
+        return resp
+    
+@app.route('/login', methods=['POST', 'OPTIONS'])
+def login():
+    if request.method=='POST':
+        email = request.args.get("email" ,type = str, default="")
+        password = request.args.get("password" ,type = str, default="")
+        print("email: %s"%(email))
+        print("password: %s"%(password))
+        
+        success, msg=loginapp.loginmain(email, password)
+        
+        ret={
+            'result':success,
+            'msg':msg
             }
         
         resp = flask.Response(json.dumps(ret))

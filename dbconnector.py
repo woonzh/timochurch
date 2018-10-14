@@ -78,6 +78,16 @@ def setUrl(newurl):
     
     return ret
 
+def getPassword2(email):
+    query="SELECT pass FROM users WHERE email='%s'"%(email)
+    result=runquery(query)
+    try:
+        ret=result[0][0]
+        return True, ret
+    except:
+        ret="user not found"
+        return False, ret
+
 def getPassword():
     query="SELECT val FROM datastore WHERE item='password'"
     result=runquery(query)
@@ -89,6 +99,17 @@ def getPassword():
     return ret
 
 def setPassword(newurl):
+    query="UPDATE datastore SET val='%s' WHERE item='password'"%(newurl)
+    print(query)
+    result=runUpdateQuery(query)
+    if result > 0:
+        ret="success"
+    else:
+        ret='fail'
+    
+    return ret
+
+def recordLogin(email):
     query="UPDATE datastore SET val='%s' WHERE item='password'"%(newurl)
     print(query)
     result=runUpdateQuery(query)
